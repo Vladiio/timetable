@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} Расписание предметов {% endblock %}
+
+{% block content %}
+    <h4 class="text-info mark-info"></h4>
+        <table class="table">
+            <caption>Расписание предметов</caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название предмета</th>
+                    <th>Начало</th>
+                    <th>Преподаватель</th>
+                    <th>Информация</th>
+                </tr>
+            </thead>
+            {% for subject in subject_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ subject.title }}</td>
+                    <td>{{ subject.time|date:'h-i' }}</td>
+                    <td>{{ subject.teacher }}</td>
+                    <td>
+                        {% if user.is_authenticated %}
+                            <button class="btn btn-default btn-sm mark"
+                                    data-subject_id="{{ subject.id }}">
+                                Узнать оценку
+                            </button>
+                        {% else %}
+                            <span class="text-info">Не доступно</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+{% endblock %}
