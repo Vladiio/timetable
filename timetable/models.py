@@ -20,23 +20,14 @@ class Teacher(models.Model):
 
 
 class Student(models.Model):
-    MARK_CHOICES = (
-        (u'Нет оценки', 0),
-        (u'Плохо', 2),
-        (u'Удовлетворительно', 3),
-        (u'Хорошо', 4),
-        (u'Отлично', 5),
-    )
+
     first_name = models.CharField(max_length=40,
                                   verbose_name=u'Имя')
     surname = models.CharField(max_length=40,
                                verbose_name=u'Фамилия')
     group = models.CharField(max_length=20,
                              verbose_name=u'Группа')
-    mark = models.CharField(max_length=20,
-                            choices=MARK_CHOICES,
-                            default=u'Нет оценки',
-                            verbose_name=u'Оценка')
+
     user = models.ForeignKey(User,
                              related_name='student')
 
@@ -68,3 +59,23 @@ class Subject(models.Model):
         verbose_name_plural = u'Предметы'
 
 
+class Mark(models.Model):
+    VALUE_CHOICES = (
+        (u'Нет оценки ', u'Нет оценки'),
+        (u'Плохо ', '2'),
+        (u'Удовлетворительно ', '3'),
+        (u'Хорошо ', '4'),
+        (u'Отлично ', '5'),
+        )
+    student = models.ForeignKey(Student, related_name='marks')
+    subject = models.ForeignKey(Subject)
+    value = models.CharField(max_length=20,
+                             choices=VALUE_CHOICES,
+                             default=u'Нет оценки')
+
+    def __unicode__(self):
+        return u'{}'.format(self.value)
+
+    class Meta:
+        verbose_name = u'Оценка'
+        verbose_name_plural = u'Оценки'

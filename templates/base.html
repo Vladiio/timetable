@@ -29,7 +29,7 @@
               {% if user.is_authenticated %}
 
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#">Hi, {{ user.username }}</a></li>
+                  <li><a href="{% url 'timetable:logout' %}">Logout, ({{ user.username }})</a></li>
                 </ul>
 
               {% else %}

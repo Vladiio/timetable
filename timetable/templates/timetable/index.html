@@ -24,10 +24,10 @@
                     <td>{{ subject.teacher }}</td>
                     <td>
                         {% if user.is_authenticated %}
-                            <button class="btn btn-default btn-sm mark"
-                                    data-subject_id="{{ subject.id }}">
-                                Узнать оценку
-                            </button>
+                                <button class="btn btn-default btn-sm mark"
+                                      data-subject_id="{{ subject.id }}">
+                                    Узнать оценки
+                                </button>
                         {% else %}
                             <span class="text-info">Не доступно</span>
                         {% endif %}
@@ -35,5 +35,6 @@
                 </tr>
             {% endfor %}
         </table>
+        <h3 class="text-info mark-value"></h3>
 
 {% endblock %}

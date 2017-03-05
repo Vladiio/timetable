@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 from django.views import generic
 from django.utils import timezone
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from .models import Subject, Student
+from .models import Subject, Student, Mark
 
 
 class IndexView(generic.ListView):
@@ -40,12 +40,25 @@ def get_mark(request):
 
     try:
         student = Student.objects.get(user_id=user_id)
+        marks = Mark.objects.filter(student_id=student.id,
+                                   subject_id=subject_id)
+
     except Student.DoesNotExist:
-        mark = u'Произошла ошибка, возможно вы не являетесь студентом'
+        result = u'Произошла ошибка, возможно вы не являетесь студентом'
+
     else:
-        mark = u'Ваша оценка: ' + student.mark
 
-    return HttpResponse(mark)
+        if not marks:
+            result = u'У вас еще нет оценки по этому предмету'
+        else:
+            result = ''
+            for mark in marks:
+                result += str(mark) + '; '
+            result = result[:-2]
+
+    return StreamingHttpResponse(result)
 
 
-
+def logout(request):
+    auth.logout(request)
+    return redirect(reverse('timetable:index'))
